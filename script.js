@@ -8,7 +8,10 @@ const discardBtn = document.getElementById("discard-btn");
 const tasksContainer = document.getElementById("tasks-container");
 const titleInput = document.getElementById("title-input");
 const dateInput = document.getElementById("date-input");
+const dueDateInput = document.getElementById("due-date-input");
 const descriptionInput = document.getElementById("description-input");
+
+const sortOptionValue = document.getElementById("selectSort").value;
 
 const taskData = JSON.parse(localStorage.getItem("data")) || [];
 let currentTask = {};
@@ -19,6 +22,7 @@ const addOrUpdateTask = () => {
         id: `${titleInput.value.toLowerCase().split(" ").join("-")}-${Date.now()}`,
         title: titleInput.value,
         date: dateInput.value,
+        dueDate: dueDateInput.value,
         description: descriptionInput.value,
     };
 
@@ -37,11 +41,12 @@ const updateTaskContainer = () => {
     tasksContainer.innerHTML = "";
 
     taskData.forEach(
-        ({ id, title, date, description }) => {
+        ({ id, title, date, dueDate, description }) => {
             (tasksContainer.innerHTML += `
         <div class="task" id="${id}">
           <p><strong>Title:</strong> ${title}</p>
-          <p><strong>Date:</strong> ${date}</p>
+          <p><strong>Do Date:</strong> ${date}</p>
+          <p><strong>Due Date:</strong> ${dueDate}</p>
           <p><strong>Description:</strong> ${description}</p>
           <button onclick="editTask(this)" type="button" class="btn">Edit</button>
           <button onclick="deleteTask(this)" type="button" class="btn">Delete</button> 
@@ -71,6 +76,7 @@ const editTask = (buttonEl) => {
 
     titleInput.value = currentTask.title;
     dateInput.value = currentTask.date;
+    dueDateInput.value = currentTask.dueDate;
     descriptionInput.value = currentTask.description;
 
     addOrUpdateTaskBtn.innerText = "Update Task";
@@ -81,6 +87,7 @@ const editTask = (buttonEl) => {
 const reset = () => {
     titleInput.value = "";
     dateInput.value = "";
+    dueDateInput.value = "";
     descriptionInput.value = "";
     taskForm.classList.toggle("hidden");
     currentTask = {};
@@ -95,8 +102,8 @@ openTaskFormBtn.addEventListener("click", () =>
 );
 
 closeTaskFormBtn.addEventListener("click", () => {
-    const formInputsContainValues = titleInput.value || dateInput.value || descriptionInput.value;
-    const formInputValuesUpdated = titleInput.value !== currentTask.title || dateInput.value !== currentTask.date || descriptionInput.value !== currentTask.description;
+    const formInputsContainValues = titleInput.value || dateInput.value || dueDateInput.value || descriptionInput.value;
+    const formInputValuesUpdated = titleInput.value !== currentTask.title || dateInput.value !== currentTask.date || dueDateInput !== currentTask.dueDate || descriptionInput.value !== currentTask.description;
 
     if (formInputsContainValues && formInputValuesUpdated) {
         confirmCloseDialog.showModal();
@@ -117,3 +124,24 @@ taskForm.addEventListener("submit", (e) => {
 
     addOrUpdateTask();
 });
+
+
+const sortByDoDate = () => {
+    taskData.sort((a, b) => {
+        console.log("sort!");
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+
+        return dateA - dateB;
+    });
+
+    localStorage.setItem("data", JSON.stringify(taskData));
+    updateTaskContainer();
+};
+
+
+function sortOption(){
+    if(sortOptionValue === "date"){
+        sortByDoDate();
+    }
+}

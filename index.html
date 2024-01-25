@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Learn localStorage By Building a Todo App</title>
+    <title>Todo App</title>
     <link rel="stylesheet" href="styles.css" />
 </head>
 
@@ -16,6 +16,12 @@
         <button id="open-task-form-btn" class="btn large-btn">
             Add New Task
         </button>
+        <label for="selectSort">
+            <select id="selectSort" onchange="sortOption()">
+                <option value="date">Date</option>
+                <option value="priority">Priority</option>
+            </select>
+        </label>
         <form class="task-form hidden" id="task-form">
             <div class="task-form-header">
                 <button id="close-task-form-btn" class="close-task-form-btn" type="button" aria-label="close">
@@ -25,8 +31,10 @@
             <div class="task-form-body">
                 <label class="task-form-label" for="title-input">Title</label>
                 <input required type="text" class="form-control" id="title-input" value="" />
-                <label class="task-form-label" for="date-input">Date</label>
+                <label class="task-form-label" for="date-input">Do Date</label>
                 <input type="date" class="form-control" id="date-input" value="" />
+                <label class="task-form-label" for="due-date-input">Due Date</label>
+                <input type="date" class="form-control" id="due-date-input" value="" />
                 <label class="task-form-label" for="description-input">Description</label>
                 <textarea class="form-control" id="description-input" cols="30" rows="5"></textarea>
             </div>
@@ -54,5 +62,4 @@
 </main>
 <script src="script.js"></script>
 </body>
-
 </html>
