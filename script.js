@@ -10,7 +10,7 @@ const titleInput = document.getElementById("title-input");
 const dateInput = document.getElementById("date-input");
 const dueDateInput = document.getElementById("due-date-input");
 const descriptionInput = document.getElementById("description-input");
-
+const priorityInput = document.getElementById("priority-input");
 const sortOptionValue = document.getElementById("selectSort").value;
 
 const taskData = JSON.parse(localStorage.getItem("data")) || [];
@@ -18,12 +18,14 @@ let currentTask = {};
 
 const addOrUpdateTask = () => {
     const dataArrIndex = taskData.findIndex((item) => item.id === currentTask.id);
+
     const taskObj = {
         id: `${titleInput.value.toLowerCase().split(" ").join("-")}-${Date.now()}`,
         title: titleInput.value,
         date: dateInput.value,
         dueDate: dueDateInput.value,
         description: descriptionInput.value,
+        priority: priorityInput.value
     };
 
     if (dataArrIndex === -1) {
@@ -128,7 +130,7 @@ taskForm.addEventListener("submit", (e) => {
 
 const sortByDoDate = () => {
     taskData.sort((a, b) => {
-        console.log("sort!");
+        console.log("sort by date!");
         const dateA = new Date(a.date);
         const dateB = new Date(b.date);
 
@@ -139,9 +141,26 @@ const sortByDoDate = () => {
     updateTaskContainer();
 };
 
+const sortByPriority = () => {
+    taskData.sort((a, b) => {
+        console.log("sort by date!");
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+
+        return dateA - dateB;
+    });
+
+    localStorage.setItem("data", JSON.stringify(taskData));
+    updateTaskContainer();
+};
 
 function sortOption(){
-    if(sortOptionValue === "date"){
-        sortByDoDate();
+
+    switch(sortOptionValue){
+        case "date": sortByDoDate();
+        break;
+
+        case "priority": sortByPriority();
+        break;
     }
 }
